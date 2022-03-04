@@ -2,6 +2,9 @@ package persistance;
 
 import java.sql.*;
 import java.util.List;
+
+import JavaCode.TypeDocument.*;
+import JavaCode.TypeUser.*;
 import mediatek2022.*;
 // classe mono-instance  dont l'unique instance est connue de la m�diatheque
 // via une auto-d�claration dans son bloc static
@@ -42,10 +45,19 @@ public class MediathequeData implements PersistentMediatheque {
 				return null;
 			}else{
 				System.out.println("There is a result");
-				return new Subscriber(tableResultat.getString("Name"));
+				switch(tableResultat.getString("Typeuser")){
+					case "subscriber":
+						return new Subscriber(tableResultat.getString("Name"));
+					case "librarian":
+						return new librarian(tableResultat.getString("Name"));
+					default:
+					    throw new DatabaseProblemException();
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
+		} catch (DatabaseProblemException){
 			return null;
 		}
 	}
@@ -64,10 +76,25 @@ public class MediathequeData implements PersistentMediatheque {
 				return null;
 			}else{
 				System.out.println("There is a result");
-				return new Book(tableResultat.getString("Name"));
+				switch(tableResultat.getString("Typedoc")){
+					case "1":
+						return new Book(tableResultat.getString("Name"));
+						break;
+					case "2":
+						return new DVD(tableResultat.getString("Name"));
+						break;
+					case "3":
+						return new CD(tableResultat.getString("Name"));
+							break;
+					default:
+					    throw new DatabaseProblemException();
+					}
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
+		} catch (DatabaseProblemException){
 			return null;
 		}
 	}

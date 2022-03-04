@@ -1,4 +1,4 @@
-package persistance;
+package JavaCode.TypeDocument;
 
 import mediatek2022.Utilisateur;
 

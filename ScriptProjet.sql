@@ -6,7 +6,7 @@ CREATE OR REPLACE TABLE document
 (
 Numdoc INTEGER PRIMARY KEY,
 Namedoc VARCHAR(30) NOT NULL,
-Typedoc VARCHAR(10) NOT NULL
+Typedoc INTEGER NOT NULL
 );
 
 CREATE OR REPLACE TABLE user
@@ -38,15 +38,15 @@ REFERENCES document(Numdoc)
 ON DELETE CASCADE;
 
 insert into document (Numdoc , Namedoc , Typedoc)
-values(1,'LaBible','LIVRE');
+values(1,'LaBible','3');
 insert into document (Numdoc , Namedoc , Typedoc)
-values(2,'Fondation','LIVRE');
+values(2,'Fondation','1');
 insert into document (Numdoc , Namedoc , Typedoc)
-values(3,'2001Odyssée de lespace','DVD');
+values(3,'2001Odyssée de lespace','2');
 
 insert into user (Matricule , Name , Login , Password , Typeuser)
-values(10,'Amandier','Aliam','leboos','abonné');
+values(10,'Amandier','Aliam','leboos','subscriber');
 insert into user (Matricule , Name , Login , Password , Typeuser)
-values(20,'Soblet','Saled','ortig','bibliothécaire');
+values(20,'Soblet','Saled','ortig','librarian');
 
 commit;

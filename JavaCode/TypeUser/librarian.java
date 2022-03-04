@@ -1,8 +1,8 @@
-package persistance;
+package JavaCode.TypeUser;
 
-public class Subscriber implements mediatek2022.Utilisateur{
+public class librarian  implements mediatek2022.Utilisateur{
     private String Uname;
-    public Subscriber(String name){
+    public librarian (String name){
         this.Uname = name;
     }
 
