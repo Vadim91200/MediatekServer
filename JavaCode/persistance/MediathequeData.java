@@ -1,4 +1,4 @@
-package persistance;
+package JavaCode.persistance;
 
 import java.sql.*;
 import java.util.List;
