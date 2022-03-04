@@ -10,8 +10,10 @@
     <%
     String OPERANDE1 = request.getParameter("log");
     String OPERANDE2 = request.getParameter("pass");
-    Mediatheque.getInstance().getUser(OPERANDE1, OPERANDE2);
+    Utilisateur Michel = Mediatheque.getInstance().getUser(OPERANDE1, OPERANDE2);
     out.println("Je crois que ça marche");
+
+    out.println(Michel.name());
   %>
     </body>
 </html>
