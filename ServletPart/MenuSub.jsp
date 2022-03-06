@@ -17,11 +17,8 @@
         out.println(OPERANDE2);
         response.sendRedirect("http://localhost:8080/Projet/accueil.html");
     }else{
-        if (Michel.isBibliothecaire()){
-            response.sendRedirect("http://localhost:8080/Projet/MenuLib.jsp");
-        }else{
-            response.sendRedirect("http://localhost:8080/Projet/MenuSub.jsp");
-        }
+        if {Michel.isBibliothecaire()}
+        out.println(Michel.name());
     }
   %>
     </body>
