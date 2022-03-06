@@ -12,7 +12,7 @@ public class librarian  implements mediatek2022.Utilisateur{
 
 
     public boolean isBibliothecaire() {
-        return false;
+        return true;
     }
 
 
