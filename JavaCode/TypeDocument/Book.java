@@ -26,4 +26,8 @@ public class Book implements mediatek2022.Document{
         this.available = true;
         
     }
+    @Override
+    public String toString() {
+        return Dname;
+    }
 }

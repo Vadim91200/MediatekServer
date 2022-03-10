@@ -1,10 +1,12 @@
 package JavaCode.persistance;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import JavaCode.*;
 import JavaCode.PersonalException.*;
 import JavaCode.TypeDocument.*;
 import JavaCode.TypeUser.*;
@@ -15,13 +17,16 @@ import mediatek2022.*;
 
 
 public class MediathequeData implements PersistentMediatheque {
+	private static Connection bdd;
 	// Jean-Fran�ois Brette 01/01/2018
 		static {
 			Mediatheque.getInstance().setData(new MediathequeData());
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-
+			bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -33,7 +38,6 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public List<Document> tousLesDocumentsDisponibles() {
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
 				Statement requeteStatique = bdd.createStatement();
 				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document");
 				ArrayList<Document> Doclist = new ArrayList<Document>();
@@ -44,15 +48,15 @@ public class MediathequeData implements PersistentMediatheque {
 					System.out.println("There is a result");
 						switch(tableResultat.getString("Typedoc")){
 							case "1":
-								Document D = new Book(tableResultat.getString("Name"));
+								Document D = new Book(tableResultat.getString("Namedoc"));
 								Doclist.add(D);
 								break;
 							case "2":
-								Document g = new DVD(tableResultat.getString("Name"));
+								Document g = new DVD(tableResultat.getString("Namedoc"));
 								Doclist.add(g);
 								break;
 							case "3":
-								Document l = new CD(tableResultat.getString("Name"));
+								Document l = new CD(tableResultat.getString("Namedoc"));
 								Doclist.add(l);
 								break;
 							default:
@@ -75,7 +79,6 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public Utilisateur getUser(String login, String password) {
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
 				Statement requeteStatique = bdd.createStatement();
 				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM user WHERE (Login = '" + login + "') AND (Password = '" + password + "')");
 				if(!tableResultat.next()){
@@ -107,7 +110,6 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public Document getDocument(int numDocument) {
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
 				Statement requeteStatique = bdd.createStatement();
 				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document WHERE (Numdoc = '" + numDocument + "')");
 				if(!tableResultat.next()){
@@ -141,10 +143,10 @@ public class MediathequeData implements PersistentMediatheque {
 			// args[0] -> le titre
 			// args [1] --> l'auteur
 			// etc... variable suivant le type de document
+			System.out.println("Je vais inserer ma vie");
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
 				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResultat = requeteStatique.executeQuery("INSERT INTO document (Numdoc , Namedoc , Typedoc) values(10,'" + args[0] + "','" + args[1] + "')"); 
+				ResultSet tableResultat = requeteStatique.executeQuery("INSERT INTO document (Namedoc , Typedoc) values('" + (String) args[0] + "','" + type + "')"); 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

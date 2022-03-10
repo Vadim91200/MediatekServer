@@ -1,8 +1,0 @@
-./persistance/MediathequeData.java
-./InitListener.java
-./TypeDocument/Book.java
-./TypeDocument/CD.java
-./TypeDocument/DVD.java
-./PersonalException/DatabaseProblemException.java
-./TypeUser/librarian.java
-./TypeUser/Subscriber.java

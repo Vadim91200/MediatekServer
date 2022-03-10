@@ -11,6 +11,10 @@ public class DVD implements mediatek2022.Document{
         this.available = true;
     }
 
+    public String name(){
+        return this.Dname;
+    }
+
     public boolean disponible() {
         return this.available;
     }
@@ -25,5 +29,9 @@ public class DVD implements mediatek2022.Document{
         this.proprietaire = null;
         this.available = true;
         
+    }
+    @Override
+    public String toString() {
+        return Dname;
     }
 }
