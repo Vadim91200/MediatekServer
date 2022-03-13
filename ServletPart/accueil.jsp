@@ -10,7 +10,7 @@
   	        <label for="log">Login:</label><br>
             <input type="text" id="log" name="log"><br>
 	        <label for="pass">Password:</label><br>
-            <input type="text" id="pass" name="pass"><br>
+            <input type="password" id="pass" name="pass"><br>
 	        <input type="submit" value="Submit">
 	    </form>	     
     </body>
