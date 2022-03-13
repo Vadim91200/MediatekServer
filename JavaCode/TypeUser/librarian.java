@@ -1,22 +1,11 @@
 package JavaCode.TypeUser;
 
-public class librarian  implements mediatek2022.Utilisateur{
-    private String Uname;
+public class librarian extends aUser{
     public librarian (String name){
         this.Uname = name;
     }
-
-    public String name() {
-        return this.Uname;
-    }
-
-
+    @Override
     public boolean isBibliothecaire() {
         return true;
-    }
-
-
-    public Object[] data() {
-        return new Object[0];
     }
 }

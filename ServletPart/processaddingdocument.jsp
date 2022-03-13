@@ -9,7 +9,9 @@
     <%
     String OPERANDE1 = request.getParameter("name");
     String OPERANDE2 = request.getParameter("Type");
-    Mediatheque.getInstance().ajoutDocument(OPERANDE1, Object ...(OPERANDE2));
+    System.out.println(Integer.parseInt(OPERANDE2));
+    Mediatheque.getInstance().ajoutDocument(Integer.parseInt(OPERANDE2), OPERANDE1);
+    response.sendRedirect("http://localhost:8080/Projet/MenuLib.jsp");
   %>
     </body>
 </html>
