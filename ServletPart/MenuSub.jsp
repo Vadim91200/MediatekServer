@@ -62,10 +62,9 @@
         <%
         HttpSession laSession = request.getSession(true);
         Utilisateur u = (Utilisateur) laSession.getAttribute("user");
-        List M = Mediatheque.getInstance().tousLesDocumentsDisponibles();
-        for(int i=0; i< M.size(); i++){
+        for(int i=0; i< u.data[0].size(); i++){
             %>
-            <option value=<%=i%>> <%= M.get(i).toString() %> </option> 
+            <option value=<%=i%>> <%= u.data[0](i).toString() %> </option> 
             <%
         }
         %>

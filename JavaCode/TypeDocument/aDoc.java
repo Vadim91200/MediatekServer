@@ -1,5 +1,6 @@
 package JavaCode.TypeDocument;
 
+
 import mediatek2022.Utilisateur;
 public abstract class aDoc implements mediatek2022.Document {
     protected String Dname;
@@ -12,6 +13,7 @@ public abstract class aDoc implements mediatek2022.Document {
     
     public void emprunt(Utilisateur u) throws Exception {
         this.Owner = u;
+        u.adddocument(this);
         this.available = false;
         
     }
