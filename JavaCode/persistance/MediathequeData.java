@@ -89,11 +89,19 @@ public class MediathequeData implements PersistentMediatheque {
 					return null;
 				}else{
 					System.out.println("There is a result");
+					Statement requeteStatique2 = bdd.createStatement();
+					ResultSet tableResult2 = requeteStatique2.executeQuery("SELECT * FROM document WHERE Ownerdoc = '" + tableResult.getString("Matricule") + "'");
+					ArrayList<String> l = new ArrayList<String>();
+					if(tableResult2.next()){
+						do{
+							l.add(tableResult2.getString("Namedoc"));
+						}while (tableResult2.next());
+					}
 					switch(tableResult.getString("Typeuser")){
 						case "subscriber":
-							return new Subscriber(tableResult.getString("Name"));
+							return new Subscriber(tableResult.getString("Name"), l);
 						case "librarian":
-							return new librarian(tableResult.getString("Name"));
+							return new librarian(tableResult.getString("Name"), l);
 						default:
 						    throw new DatabaseProblemException("The type of the user is unknown");
 					}

@@ -1,12 +1,16 @@
 package JavaCode.TypeUser;
-import java.util.ArrayList;
+<<<<<<< HEAD
 
-import JavaCode.persistance.MediathequeData;
+import java.util.ArrayList;
 public abstract class aUser implements mediatek2022.Utilisateur{
     protected String Uname;
-    protected Object[] Datalist; 
-    public aUser(){
-        Datalist = new Object[250];
+    protected Object[] thedata;
+
+    public aUser (String name, ArrayList<String> l){
+        this.Uname = name;
+        this.thedata = new Object[4];
+        this.thedata[0] = new ArrayList<String>();
+        this.thedata[0] = l;
     }
     public String name() {
         return this.Uname;
@@ -15,6 +19,9 @@ public abstract class aUser implements mediatek2022.Utilisateur{
     public abstract boolean isBibliothecaire();
 
     public Object[] data() {
+<<<<<<< HEAD
+        return this.thedata;
+=======
         return this.Datalist;
     }
     public void adddocument(mediatek2022.Document d){
@@ -29,5 +36,6 @@ public abstract class aUser implements mediatek2022.Utilisateur{
             }
         }
         
+>>>>>>> e84c438854ba892fac7785f97dfd505aaea30a11
     }
 }
