@@ -18,7 +18,6 @@ public abstract class aDoc implements mediatek2022.Document {
     
     public void emprunt(Utilisateur u) throws Exception {
         this.Owner = u;
-        u.adddocument(this);
         this.available = false;
         bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
         try {

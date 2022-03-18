@@ -35,42 +35,46 @@
     <%@ page  import = 'mediatek2022.*'%>
     <%@ page  import = 'java.util.*'%>
 <main class="form-signin">
-  <form action="" method="post">
+  <form action="processborrowdocument.jsp" method="post">
+    <%
+        List L = Mediatheque.getInstance().tousLesDocumentsDisponibles();
+        int c;
+      %>
     <h1 class="h3 mb-6 fw-normal">Borrow a document</h1>
     <div class="form-floating">
       <select class="form-select" name ="Name" aria-label="Default select example">
         <option selected> Select the name of the document</option>
         <%
-        List L = Mediatheque.getInstance().tousLesDocumentsDisponibles();
-        for(int i=0; i< L.size(); i++){
+        for(c=0; c< L.size(); c++){
         %>
-            <option value=<%=i%>> <%= L.get(i).toString() %> </option> 
+            <option value=<%=c%>> <%= L.get(c).toString() %> </option> 
         <%
-        HttpSession laSession = request.getSession(true);
-        Utilisateur u = (Utilisateur) laSession.getAttribute("user");
-        Mediatheque.getInstance().emprunt((Document) L.get(i),u); 
         }
-        
+        HttpSession laSession = request.getSession(true);
+        laSession.setAttribute("choisi", c);
         %>
       </select>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Borrow</button>
+  </form>
+  <form action="" method="post"></form>
     <h1 class="h3 mb-6 fw-normal">return a document</h1>
     <div class="form-floating">
       <select class="form-select" name ="Name" aria-label="Default select example">
         <option selected> Select the name of the document</option>
         <%
-        HttpSession laSession = request.getSession(true);
-        Utilisateur u = (Utilisateur) laSession.getAttribute("user");
-        for(int i=0; i< u.data[0].size(); i++){
+        HttpSession leSession = request.getSession(true);
+        Utilisateur u = (Utilisateur) leSession.getAttribute("user");
+        ArrayList<String> M = (ArrayList<String>) u.data()[0];
+        for(int i=0; i< M.size(); i++){
             %>
-            <option value=<%=i%>> <%= u.data[0](i).toString() %> </option> 
+            <option value=<%=i%>> <%= M.get(i).toString() %> </option> 
             <%
         }
         %>
       </select>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Borrow</button>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Return</button>
   </form>
 </main>
 

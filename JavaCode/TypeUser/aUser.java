@@ -1,5 +1,4 @@
 package JavaCode.TypeUser;
-<<<<<<< HEAD
 
 import java.util.ArrayList;
 public abstract class aUser implements mediatek2022.Utilisateur{
@@ -19,23 +18,6 @@ public abstract class aUser implements mediatek2022.Utilisateur{
     public abstract boolean isBibliothecaire();
 
     public Object[] data() {
-<<<<<<< HEAD
         return this.thedata;
-=======
-        return this.Datalist;
-    }
-    public void adddocument(mediatek2022.Document d){
-        int i = 0;
-        while(true){
-            if (this.Datalist[i] != null){
-                i++;
-                continue;
-            }else {
-                this.Datalist[i] = d;
-                i++;
-            }
-        }
-        
->>>>>>> e84c438854ba892fac7785f97dfd505aaea30a11
     }
 }
