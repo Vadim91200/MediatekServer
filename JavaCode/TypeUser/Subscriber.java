@@ -1,22 +1,12 @@
 package JavaCode.TypeUser;
-
-public class Subscriber implements mediatek2022.Utilisateur{
-    private String Uname;
-    public Subscriber(String name){
-        this.Uname = name;
+import java.util.ArrayList;
+import mediatek2022.Document;
+public class Subscriber extends aUser{
+    public Subscriber(String name, ArrayList<Document> l){
+        super(name, l);
     }
-
-    public String name() {
-        return this.Uname;
-    }
-
-
+    @Override
     public boolean isBibliothecaire() {
         return false;
-    }
-
-
-    public Object[] data() {
-        return new Object[0];
     }
 }

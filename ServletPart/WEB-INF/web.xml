@@ -1,8 +1,17 @@
 <web-app>
 
+<servlet>
+<servlet-name> premieressai </servlet-name>
+<servlet-class> TestServlet </servlet-class>
+</servlet>
+
+<servlet-mapping>
+<servlet-name> premieressai</servlet-name>
+<url-pattern>/essai </url-pattern>
+</servlet-mapping>
 
 <listener>
-    <listener-class>InitListener</listener-class>
+    <listener-class>JavaCode.InitListener</listener-class>
 </listener>
 
 </web-app>

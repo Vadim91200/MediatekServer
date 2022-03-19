@@ -1,10 +1,8 @@
 package JavaCode.persistance;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import JavaCode.*;
 import JavaCode.PersonalException.*;
 import JavaCode.TypeDocument.*;
 import JavaCode.TypeUser.*;
@@ -15,12 +13,13 @@ import mediatek2022.*;
 
 
 public class MediathequeData implements PersistentMediatheque {
+	private static PrepareDatabase bdd;
 	// Jean-Fran�ois Brette 01/01/2018
 		static {
 			Mediatheque.getInstance().setData(new MediathequeData());
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-
+			bdd = new PrepareDatabase();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -33,33 +32,32 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public List<Document> tousLesDocumentsDisponibles() {
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document");
+				ResultSet ResultDocument = bdd.getselect("Document", "Ownerdoc IS NULL");
 				ArrayList<Document> Doclist = new ArrayList<Document>();
-				if(!tableResultat.next()){
-					System.out.println("The request is empty");
+				int i=0;
+				if(!ResultDocument.next()){
+					System.out.println("Request empty : No such document(s)");
 					return null;
 				}else do{
-					System.out.println("There is a result");
-						switch(tableResultat.getString("Typedoc")){
+						switch(ResultDocument.getString("Typedoc")){
 							case "1":
-								Document D = new Book(tableResultat.getString("Name"));
+								Document D = new Book(ResultDocument.getString("Namedoc"));
 								Doclist.add(D);
 								break;
 							case "2":
-								Document g = new DVD(tableResultat.getString("Name"));
+								Document g = new DVD(ResultDocument.getString("Namedoc"));
 								Doclist.add(g);
 								break;
 							case "3":
-								Document l = new CD(tableResultat.getString("Name"));
+								Document l = new CD(ResultDocument.getString("Namedoc"));
 								Doclist.add(l);
 								break;
 							default:
 								throw new DatabaseProblemException("The type of the document is unknown");
 						}
-					
-				}while (tableResultat.next());
+						i++;
+				}while (ResultDocument.next());
+				System.out.println("There is a result : " + i + " document(s) found");
 				return Doclist;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -75,19 +73,25 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public Utilisateur getUser(String login, String password) {
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM user WHERE (Login = '" + login + "') AND (Password = '" + password + "')");
-				if(!tableResultat.next()){
-					System.out.println("The request is empty");
+				ResultSet ResultUser = bdd.getselect("user", "(Login = '" + login + "') AND (Password = '" + password + "')");
+				if(!ResultUser.next()){
+					System.out.println("Request empty : No such user");
 					return null;
 				}else{
-					System.out.println("There is a result");
-					switch(tableResultat.getString("Typeuser")){
+					System.out.println("There is a result : user found");
+					ResultSet ResultOwner = bdd.getselect("document", "Ownerdoc = '" + ResultUser.getString("Matricule") + "'");
+					ArrayList<Document> l = new ArrayList<Document>();
+					if(ResultOwner.next()){
+						do{
+							l.add(getDocument(Integer.parseInt(ResultOwner.getString("Numdoc"))));
+							
+						}while (ResultOwner.next());
+					}
+					switch(ResultUser.getString("Typeuser")){
 						case "subscriber":
-							return new Subscriber(tableResultat.getString("Name"));
+							return new Subscriber(ResultUser.getString("Name"), l);
 						case "librarian":
-							return new librarian(tableResultat.getString("Name"));
+							return new librarian(ResultUser.getString("Name"), l);
 						default:
 						    throw new DatabaseProblemException("The type of the user is unknown");
 					}
@@ -107,21 +111,19 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public Document getDocument(int numDocument) {
 			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document WHERE (Numdoc = '" + numDocument + "')");
-				if(!tableResultat.next()){
-					System.out.println("The request is empty");
+				ResultSet ResultDocument = bdd.getselect("document", "(Numdoc = '" + numDocument + "')");
+				if(!ResultDocument.next()){
+					System.out.println("Request empty : No such document");
 					return null;
 				}else{
-					System.out.println("There is a result");
-					switch(tableResultat.getString("Typedoc")){
+					System.out.println("There is a result : document found");
+					switch(ResultDocument.getString("Typedoc")){
 						case "1":
-							return new Book(tableResultat.getString("Name"));
+							return new Book(ResultDocument.getString("Namedoc"));
 						case "2":
-							return new DVD(tableResultat.getString("Name"));
+							return new DVD(ResultDocument.getString("Namedoc"));
 						case "3":
-							return new CD(tableResultat.getString("Name"));
+							return new CD(ResultDocument.getString("Namedoc"));
 						default:
 						    throw new DatabaseProblemException("The type of the document is unknown");
 					}
@@ -141,12 +143,6 @@ public class MediathequeData implements PersistentMediatheque {
 			// args[0] -> le titre
 			// args [1] --> l'auteur
 			// etc... variable suivant le type de document
-			try {
-				Connection bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResultat = requeteStatique.executeQuery("INSERT INTO document (Numdoc , Namedoc , Typedoc) values(10,'" + args[0] + "','" + args[1] + "')"); 
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				ResultSet tableResult = bdd.getInsert("document (Namedoc , Typedoc)", "'" + (String) args[0] + "','" + type + "'"); 
 		}
 	}
