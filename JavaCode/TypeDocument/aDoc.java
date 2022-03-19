@@ -1,15 +1,19 @@
 package JavaCode.TypeDocument;
 import java.sql.*;
+
+import JavaCode.PersonalException.DatabaseProblemException;
+import JavaCode.persistance.PrepareDatabase;
 import mediatek2022.Utilisateur;
 public abstract class aDoc implements mediatek2022.Document {
     protected String Dname;
     protected boolean available;
     protected Utilisateur Owner;
-    private static Connection bdd;
+    private static PrepareDatabase bdd;
 
     public aDoc(String name){
         this.Dname = name;
         this.available = true;
+        this.bdd = new PrepareDatabase();
     }
 
     public boolean disponible() {
@@ -19,16 +23,13 @@ public abstract class aDoc implements mediatek2022.Document {
     public void emprunt(Utilisateur u) throws Exception {
         this.Owner = u;
         this.available = false;
-        bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
+        
         try {
-            Statement requeteStatique = bdd.createStatement();
-            System.out.println(u.name());
-            System.out.println(this.Dname);
-            ResultSet Utilisateur = requeteStatique.executeQuery("SELECT Matricule FROM user WHERE Name = '"+ u.name() + "'");
+            ResultSet Utilisateur =  this.bdd.getselect("user", "Name = '"+ u.name() + "'");
             Utilisateur.next();
-            ResultSet Document = requeteStatique.executeQuery("SELECT * FROM document where Namedoc = '" + this.Dname + "'");
+            ResultSet Document = this.bdd.getselect("document", "Namedoc = '" + this.Dname + "'");
             Document.next();
-            ResultSet tableResult = requeteStatique.executeQuery("UPDATE document SET Ownerdoc = '" + Utilisateur.getString("Matricule") + "' WHERE Numdoc = '" + Document.getString("numdoc") + "'"); 
+            ResultSet tableResult = this.bdd.getUpdate("document", "Ownerdoc = '" + Utilisateur.getString("Matricule") + "'", "Numdoc = '" + Document.getString("numdoc") + "'"); 
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,6 +38,13 @@ public abstract class aDoc implements mediatek2022.Document {
     public void retour() {
         this.Owner = null;
         this.available = true;
+        try {
+            ResultSet Document = this.bdd.getselect("document", "Namedoc = '" + this.Dname + "'");
+            Document.next();
+            ResultSet tableResult = this.bdd.getUpdate("document", "Ownerdoc = NULL", "Numdoc = '" + Document.getString("numdoc") + "'"); 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         
     }
     @Override

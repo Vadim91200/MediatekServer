@@ -1,11 +1,7 @@
 package JavaCode.persistance;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import JavaCode.PersonalException.*;
 import JavaCode.TypeDocument.*;
@@ -17,16 +13,14 @@ import mediatek2022.*;
 
 
 public class MediathequeData implements PersistentMediatheque {
-	private static Connection bdd;
+	private static PrepareDatabase bdd;
 	// Jean-Fran�ois Brette 01/01/2018
 		static {
 			Mediatheque.getInstance().setData(new MediathequeData());
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			bdd = DriverManager.getConnection("jdbc:mariadb://localhost:3306/projet", "root", "root");
+			bdd = new PrepareDatabase();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -38,35 +32,32 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public List<Document> tousLesDocumentsDisponibles() {
 			try {
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResult = requeteStatique.executeQuery("SELECT * FROM document");
+				ResultSet ResultDocument = bdd.getselect("Document", "Ownerdoc IS NULL");
 				ArrayList<Document> Doclist = new ArrayList<Document>();
-				if(!tableResult.next()){
-					System.out.println("The request is empty");
+				int i=0;
+				if(!ResultDocument.next()){
+					System.out.println("Request empty : No such document(s)");
 					return null;
 				}else do{
-					if(tableResult.getString("Ownerdoc")==null){
-						System.out.println("There is a result");
-						switch(tableResult.getString("Typedoc")){
+						switch(ResultDocument.getString("Typedoc")){
 							case "1":
-								Document D = new Book(tableResult.getString("Namedoc"));
+								Document D = new Book(ResultDocument.getString("Namedoc"));
 								Doclist.add(D);
 								break;
 							case "2":
-								Document g = new DVD(tableResult.getString("Namedoc"));
+								Document g = new DVD(ResultDocument.getString("Namedoc"));
 								Doclist.add(g);
 								break;
 							case "3":
-								Document l = new CD(tableResult.getString("Namedoc"));
+								Document l = new CD(ResultDocument.getString("Namedoc"));
 								Doclist.add(l);
 								break;
 							default:
 								throw new DatabaseProblemException("The type of the document is unknown");
 						}
-					} else{
-						continue;
-					}
-				}while (tableResult.next());
+						i++;
+				}while (ResultDocument.next());
+				System.out.println("There is a result : " + i + " document(s) found");
 				return Doclist;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -82,26 +73,25 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public Utilisateur getUser(String login, String password) {
 			try {
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResult = requeteStatique.executeQuery("SELECT * FROM user WHERE (Login = '" + login + "') AND (Password = '" + password + "')");
-				if(!tableResult.next()){
-					System.out.println("The request is empty");
+				ResultSet ResultUser = bdd.getselect("user", "(Login = '" + login + "') AND (Password = '" + password + "')");
+				if(!ResultUser.next()){
+					System.out.println("Request empty : No such user");
 					return null;
 				}else{
-					System.out.println("There is a result");
-					Statement requeteStatique2 = bdd.createStatement();
-					ResultSet tableResult2 = requeteStatique2.executeQuery("SELECT * FROM document WHERE Ownerdoc = '" + tableResult.getString("Matricule") + "'");
-					ArrayList<String> l = new ArrayList<String>();
-					if(tableResult2.next()){
+					System.out.println("There is a result : user found");
+					ResultSet ResultOwner = bdd.getselect("document", "Ownerdoc = '" + ResultUser.getString("Matricule") + "'");
+					ArrayList<Document> l = new ArrayList<Document>();
+					if(ResultOwner.next()){
 						do{
-							l.add(tableResult2.getString("Namedoc"));
-						}while (tableResult2.next());
+							l.add(getDocument(Integer.parseInt(ResultOwner.getString("Numdoc"))));
+							
+						}while (ResultOwner.next());
 					}
-					switch(tableResult.getString("Typeuser")){
+					switch(ResultUser.getString("Typeuser")){
 						case "subscriber":
-							return new Subscriber(tableResult.getString("Name"), l);
+							return new Subscriber(ResultUser.getString("Name"), l);
 						case "librarian":
-							return new librarian(tableResult.getString("Name"), l);
+							return new librarian(ResultUser.getString("Name"), l);
 						default:
 						    throw new DatabaseProblemException("The type of the user is unknown");
 					}
@@ -121,20 +111,19 @@ public class MediathequeData implements PersistentMediatheque {
 
 		public Document getDocument(int numDocument) {
 			try {
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResult = requeteStatique.executeQuery("SELECT * FROM document WHERE (Numdoc = '" + numDocument + "')");
-				if(!tableResult.next()){
-					System.out.println("The request is empty");
+				ResultSet ResultDocument = bdd.getselect("document", "(Numdoc = '" + numDocument + "')");
+				if(!ResultDocument.next()){
+					System.out.println("Request empty : No such document");
 					return null;
 				}else{
-					System.out.println("There is a result");
-					switch(tableResult.getString("Typedoc")){
+					System.out.println("There is a result : document found");
+					switch(ResultDocument.getString("Typedoc")){
 						case "1":
-							return new Book(tableResult.getString("Name"));
+							return new Book(ResultDocument.getString("Namedoc"));
 						case "2":
-							return new DVD(tableResult.getString("Name"));
+							return new DVD(ResultDocument.getString("Namedoc"));
 						case "3":
-							return new CD(tableResult.getString("Name"));
+							return new CD(ResultDocument.getString("Namedoc"));
 						default:
 						    throw new DatabaseProblemException("The type of the document is unknown");
 					}
@@ -154,11 +143,6 @@ public class MediathequeData implements PersistentMediatheque {
 			// args[0] -> le titre
 			// args [1] --> l'auteur
 			// etc... variable suivant le type de document
-			try {
-				Statement requeteStatique = bdd.createStatement();
-				ResultSet tableResult = requeteStatique.executeQuery("INSERT INTO document (Namedoc , Typedoc) values('" + (String) args[0] + "','" + type + "')"); 
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				ResultSet tableResult = bdd.getInsert("document (Namedoc , Typedoc)", "'" + (String) args[0] + "','" + type + "'"); 
 		}
 	}
