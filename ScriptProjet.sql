@@ -1,14 +1,5 @@
-DROP TABLE IF EXISTS loan;
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS document;
-
-CREATE OR REPLACE TABLE document
-(
-Numdoc INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-Namedoc VARCHAR(30) NOT NULL,
-Typedoc INTEGER NOT NULL,
-Ownerdoc INTEGER
-);
+DROP TABLE IF EXISTS user;
 
 CREATE OR REPLACE TABLE user
 (
@@ -19,11 +10,14 @@ Password VARCHAR(30)NOT NULL,
 Typeuser VARCHAR(15) NOT NULL
 );
 
-ALTER TABLE document
-ADD CONSTRAINT fk_document
-FOREIGN KEY(Ownerdoc)
-REFERENCES user(Matricule)
-ON DELETE CASCADE;
+CREATE OR REPLACE TABLE document
+(
+Numdoc INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+Namedoc VARCHAR(30) NOT NULL,
+Typedoc INTEGER NOT NULL,
+Ownerdoc INTEGER,
+FOREIGN KEY (Ownerdoc) REFERENCES user(Matricule)
+);
 
 insert into document (Namedoc , Typedoc)
 values('LaBible','3');

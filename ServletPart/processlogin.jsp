@@ -12,6 +12,8 @@
     Utilisateur Michel = Mediatheque.getInstance().getUser(OPERANDE1, OPERANDE2);
     HttpSession laSession = request.getSession(true);
     laSession.setAttribute("user", Michel);
+    laSession.setAttribute("login", OPERANDE1);
+    laSession.setAttribute("password", OPERANDE2);
     if (Michel == null){
         response.sendRedirect("http://localhost:8080/Projet/accueil.html");
     }else{

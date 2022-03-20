@@ -36,28 +36,26 @@
     <%@ page  import = 'java.util.*'%>
 <main class="form-signin">
   <form action="processborrowdocument.jsp" method="post">
-    <%
-        List L = Mediatheque.getInstance().tousLesDocumentsDisponibles();
-        int c;
-      %>
     <h1 class="h3 mb-6 fw-normal">Borrow a document</h1>
     <div class="form-floating">
       <select class="form-select" name ="Name" aria-label="Default select example">
         <option selected> Select the name of the document</option>
         <%
-        for(c=0; c< L.size(); c++){
-        %>
-            <option value=<%=c%>> <%= L.get(c).toString() %> </option> 
-        <%
+        List L = Mediatheque.getInstance().tousLesDocumentsDisponibles();
+        int c;
+        if (L != null){
+          for(c=0; c< L.size(); c++){
+            %>
+                <option value=<%=c%>> <%= L.get(c).toString() %> </option> 
+            <%
+            }
         }
-        HttpSession laSession = request.getSession(true);
-        laSession.setAttribute("choisi", c);
         %>
       </select>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Borrow</button>
   </form>
-  <form action="" method="post"></form>
+  <form action="processreturndocument.jsp" method="post">
     <h1 class="h3 mb-6 fw-normal">return a document</h1>
     <div class="form-floating">
       <select class="form-select" name ="Name" aria-label="Default select example">
@@ -65,11 +63,13 @@
         <%
         HttpSession leSession = request.getSession(true);
         Utilisateur u = (Utilisateur) leSession.getAttribute("user");
-        ArrayList<String> M = (ArrayList<String>) u.data()[0];
-        for(int i=0; i< M.size(); i++){
-            %>
-            <option value=<%=i%>> <%= M.get(i).toString() %> </option> 
-            <%
+        ArrayList<Document> M = (ArrayList<Document>) u.data()[0];
+        if (M != null){
+          for(int i=0; i< M.size(); i++){
+             %>
+              <option value=<%=i%>> <%= M.get(i).toString() %> </option> 
+             <%
+          }
         }
         %>
       </select>
