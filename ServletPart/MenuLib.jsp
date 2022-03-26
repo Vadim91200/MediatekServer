@@ -34,13 +34,13 @@
   <body class="text-center">
     <%@ page  import = 'mediatek2022.*'%>
     <%
-    HttpSession leSession = request.getSession(true);
-    synchronized (laSession) {
-      Utilisateur u = (Utilisateur) leSession.getAttribute("user");
+    HttpSession TheSession = request.getSession(true);
+    synchronized (TheSession) {
+      Utilisateur u = (Utilisateur) TheSession.getAttribute("user");
       if(u!=null){
       %>
 <main class="form-signin">
-  <form action="AddDocument" method="post">
+  <form action="Adddocument" method="post">
     <h1 class="h3 mb-3 fw-normal">Add a document</h1>
     
       

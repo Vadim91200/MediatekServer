@@ -1,13 +1,9 @@
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
-import java.util.*;
-public class Signout extends HttpServlet {
+public class Processsignout extends HttpServlet {
     /**
 	 * 
 	 */
@@ -18,8 +14,9 @@ public class Signout extends HttpServlet {
         throws IOException, ServletException
     {
         HttpSession laSession = request.getSession(true);
-        laSession.setAttribute("user", null);
-        response.sendRedirect("http://localhost:8080/Projet/accueil.html"); 
+        synchronized (laSession) {
+            laSession.setAttribute("user", null);
+            response.sendRedirect("http://localhost:8080/Projet/accueil.html");
+        }
     }
-
 }

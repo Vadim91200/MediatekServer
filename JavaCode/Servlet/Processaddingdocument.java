@@ -13,14 +13,15 @@ public class Processaddingdocument extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
                       HttpServletResponse response)
         throws IOException, ServletException
     {
         String OPERANDE1 = request.getParameter("name");
-    String OPERANDE2 = request.getParameter("Type");
-    System.out.println(Integer.parseInt(OPERANDE2));
-    Mediatheque.getInstance().ajoutDocument(Integer.parseInt(OPERANDE2), OPERANDE1);
-    response.sendRedirect("http://localhost:8080/Projet/MenuLib.jsp");
+        synchronized (OPERANDE1) {
+            String OPERANDE2 = request.getParameter("Type");
+            Mediatheque.getInstance().ajoutDocument(Integer.parseInt(OPERANDE2), OPERANDE1);
+            response.sendRedirect("http://localhost:8080/Projet/MenuLib.jsp");
+        }
     }
 }

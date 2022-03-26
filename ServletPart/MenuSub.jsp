@@ -63,9 +63,9 @@
       <select class="form-select" name ="Name" aria-label="Default select example">
         <option selected> Select the name of the document</option>
         <%
-        HttpSession leSession = request.getSession(true);
-        synchronized (laSession) {
-        Utilisateur u = (Utilisateur) leSession.getAttribute("user");
+        HttpSession TheSession = request.getSession(true);
+        synchronized (TheSession) {
+        Utilisateur u = (Utilisateur) TheSession.getAttribute("user");
         if(u!=null){
           ArrayList<Document> M = (ArrayList<Document>) u.data()[0];
             if (M != null){

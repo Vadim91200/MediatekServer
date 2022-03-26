@@ -13,23 +13,29 @@ public class Processreturndocument extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
                       HttpServletResponse response)
         throws IOException, ServletException
     {
         HttpSession laSession = request.getSession(true);
-    Utilisateur n = (Utilisateur) laSession.getAttribute("user");
+        synchronized (laSession) {
+            Utilisateur n = (Utilisateur) laSession.getAttribute("user");
 
-    ArrayList<Document> M = (ArrayList<Document>) n.data()[0];
-    String OPERANDE1 = request.getParameter("Name");
-    Mediatheque.getInstance().retour(M.get(Integer.parseInt(OPERANDE1)),n);
+            ArrayList<Document> M = (ArrayList<Document>) n.data()[0];
+            String OPERANDE1 = request.getParameter("Name");
+            try {
+                Mediatheque.getInstance().retour(M.get(Integer.parseInt(OPERANDE1)), n);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ;
+            String Login = (String) laSession.getAttribute("login");
+            String Password = (String) laSession.getAttribute("password");
 
-    String Login = (String) laSession.getAttribute("login");
-    String Password = (String) laSession.getAttribute("password");
- 
-    Utilisateur TmpUser = Mediatheque.getInstance().getUser(Login, Password);
-    laSession.setAttribute("user", TmpUser);
+            Utilisateur TmpUser = Mediatheque.getInstance().getUser(Login, Password);
+            laSession.setAttribute("user", TmpUser);
 
-    response.sendRedirect("http://localhost:8080/Projet/MenuSub.jsp"); 
+            response.sendRedirect("http://localhost:8080/Projet/MenuSub.jsp");
+        }
     }
 }
