@@ -1,13 +1,53 @@
 <web-app>
 
 <servlet>
-<servlet-name> premieressai </servlet-name>
-<servlet-class> TestServlet </servlet-class>
+    <servlet-name>Adddocument</servlet-name>
+    <servlet-class>Processaddingdocument</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>BorrowDocument</servlet-name>
+    <servlet-class>Processborrowdocument</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>Login</servlet-name>
+    <servlet-class>Processlogin</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>ReturnDocument</servlet-name>
+    <servlet-class>Processreturndocument</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>Processsignout</servlet-class>
 </servlet>
 
 <servlet-mapping>
-<servlet-name> premieressai</servlet-name>
-<url-pattern>/essai </url-pattern>
+    <servlet-name>Adddocument</servlet-name>
+    <url-pattern>/Adddocument</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>BorrowDocument</servlet-name>
+    <url-pattern>/BorrowDocument</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/Login</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>ReturnDocument</servlet-name>
+    <url-pattern>/ReturnDocument</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/Logout</url-pattern>
 </servlet-mapping>
 
 <listener>

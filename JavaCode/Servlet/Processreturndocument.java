@@ -1,14 +1,23 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <title>ProcessLogin</title>
-    </head>
-    <%@ page  import = 'mediatek2022.*'%>
-    <%@ page  import = 'java.util.*'%>
-    <body>
-    <%
-    HttpSession laSession = request.getSession(true);
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import mediatek2022.*;
+import java.util.*;
+public class Processreturndocument extends HttpServlet {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+    {
+        HttpSession laSession = request.getSession(true);
     Utilisateur n = (Utilisateur) laSession.getAttribute("user");
 
     ArrayList<Document> M = (ArrayList<Document>) n.data()[0];
@@ -22,6 +31,5 @@
     laSession.setAttribute("user", TmpUser);
 
     response.sendRedirect("http://localhost:8080/Projet/MenuSub.jsp"); 
-      %>
-    </body>
-</html>
+    }
+}

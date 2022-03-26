@@ -16,7 +16,7 @@ public class PrepareDatabase {
 	public Statement getrequest(){
 		return this.request;
 	}
-	public ResultSet getselect(String Table, String condition){
+	public synchronized ResultSet getselect(String Table, String condition){
 		try {
 			ResultSet Result = this.request.executeQuery("SELECT * FROM " + Table + " WHERE " + condition + "");
 		return Result;
@@ -26,7 +26,7 @@ public class PrepareDatabase {
 		}
 		
     }
-	public ResultSet getInsert(String Table, String condition) {
+	public synchronized ResultSet getInsert(String Table, String condition) {
 		try {
 			ResultSet Result = this.request.executeQuery("INSERT INTO " + Table + " values( " + condition + ")");
 			return Result;
@@ -35,7 +35,7 @@ public class PrepareDatabase {
 			return null;
 		}
 	}
-	public ResultSet getUpdate(String Table, String set, String condition) {
+	public synchronized ResultSet getUpdate(String Table, String set, String condition) {
 		try {
 			ResultSet Result = this.request.executeQuery("Update " + Table + " SET " + set + " WHERE " + condition + "");
 			return Result;

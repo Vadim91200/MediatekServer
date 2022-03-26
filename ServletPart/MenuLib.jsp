@@ -32,11 +32,18 @@
     <link href="signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
-    
+    <%@ page  import = 'mediatek2022.*'%>
+    <%
+    HttpSession leSession = request.getSession(true);
+    synchronized (laSession) {
+      Utilisateur u = (Utilisateur) leSession.getAttribute("user");
+      if(u!=null){
+      %>
 <main class="form-signin">
-  <form action="processaddingdocument.jsp" method="post">
+  <form action="AddDocument" method="post">
     <h1 class="h3 mb-3 fw-normal">Add a document</h1>
-
+    
+      
     <div class="form-floating">
       <input type="text" class="form-control" id="floatingName" name="name" placeholder="Naee">
       <label for="floatingInput">Name of the document</label>
@@ -49,9 +56,17 @@
         <option value="3">CD</option>
       </select>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+    <button id="sub"class="w-100 btn btn-lg btn-primary" type="submit" style="margin-top: 10px; margin-bottom: 20px;">Add document</button>
   </form>
+    <button class="w-100 btn btn-lg btn-primary" onclick="window.location.href='Logout'" >Sign Out</button>
+  
 </main>
+<%
+}else {
+  response.sendRedirect("http://localhost:8080/Projet/accueil.html");
+}
+    }
+%>
 
 
     

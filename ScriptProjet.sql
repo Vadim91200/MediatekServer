@@ -30,5 +30,7 @@ insert into user ( Name , Login , Password , Typeuser)
 values('Amandier','Aliam','leboos','subscriber');
 insert into user ( Name , Login , Password , Typeuser)
 values('Soblet','Saled','ortig','librarian');
+insert into user ( Name , Login , Password , Typeuser)
+VALUES('Secrétaire','vero','bg','subscriber');
 
 commit;

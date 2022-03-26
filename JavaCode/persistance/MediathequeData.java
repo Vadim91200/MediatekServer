@@ -1,8 +1,10 @@
 package JavaCode.persistance;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.SQLException;
+import java.sql.ResultSet;
 
-import java.sql.*;
-import java.util.*;
-
+import java.lang.StringBuilder;
 import JavaCode.PersonalException.*;
 import JavaCode.TypeDocument.*;
 import JavaCode.TypeUser.*;
@@ -30,7 +32,7 @@ public class MediathequeData implements PersistentMediatheque {
 
 		// renvoie la liste de tous les documents disponibles de la m�diath�que
 
-		public List<Document> tousLesDocumentsDisponibles() {
+		public synchronized List<Document> tousLesDocumentsDisponibles() {
 			try {
 				ResultSet ResultDocument = bdd.getselect("Document", "Ownerdoc IS NULL");
 				ArrayList<Document> Doclist = new ArrayList<Document>();
@@ -71,7 +73,7 @@ public class MediathequeData implements PersistentMediatheque {
 		// va r�cup�rer le User dans la BD et le renvoie
 		// si pas trouv�, renvoie null
 
-		public Utilisateur getUser(String login, String password) {
+		public synchronized Utilisateur getUser(String login, String password) {
 			try {
 				ResultSet ResultUser = bdd.getselect("user", "(Login = '" + login + "') AND (Password = '" + password + "')");
 				if(!ResultUser.next()){
@@ -109,7 +111,7 @@ public class MediathequeData implements PersistentMediatheque {
 		// et le renvoie
 		// si pas trouv�, renvoie null
 
-		public Document getDocument(int numDocument) {
+		public synchronized Document getDocument(int numDocument) {
 			try {
 				ResultSet ResultDocument = bdd.getselect("document", "(Numdoc = '" + numDocument + "')");
 				if(!ResultDocument.next()){
@@ -139,7 +141,7 @@ public class MediathequeData implements PersistentMediatheque {
 		}
 
 
-		public void ajoutDocument(int type, Object... args) {
+		public synchronized void ajoutDocument(int type, Object... args) {
 			// args[0] -> le titre
 			// args [1] --> l'auteur
 			// etc... variable suivant le type de document
