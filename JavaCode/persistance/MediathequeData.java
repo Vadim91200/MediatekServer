@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 
 import java.lang.StringBuilder;
-import JavaCode.PersonalException.*;
-import JavaCode.TypeDocument.*;
-import JavaCode.TypeUser.*;
+import JavaCode.persistance.PersonalException.*;
+import JavaCode.persistance.TypeDocument.*;
+import JavaCode.persistance.TypeUser.*;
 import mediatek2022.*;
 // classe mono-instance  dont l'unique instance est connue de la mï¿½diatheque
 // via une auto-dï¿½claration dans son bloc static

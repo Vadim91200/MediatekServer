@@ -1,0 +1,10 @@
+
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ê·À¥ıÿÿÿÿ
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ìø—Ÿûÿÿÿÿ
+n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ı²ÿt
+F
+java:S1128"0Remove this unused import 'java.io.PrintWriter'.(ÓŞÏÛ
+Y
+java:S1128">Remove this unused import 'jakarta.servlet.RequestDispatcher'.(•Üè•ıÿÿÿÿ
+A
+java:S1860"&Synchronize on a new "Object" instead.(Ôƒ‹şÿÿÿÿ

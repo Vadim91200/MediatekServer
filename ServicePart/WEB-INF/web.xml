@@ -1,0 +1,58 @@
+<web-app>
+
+<servlet>
+    <servlet-name>Adddocument</servlet-name>
+JavaCode\persistance\Servlet
+    <servlet-class>JavaCode.persistance.Servlet.Processaddingdocument</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>BorrowDocument</servlet-name>
+    <servlet-class>JavaCode.persistance.Servlet.Processborrowdocument</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>Login</servlet-name>
+    <servlet-class>JavaCode.persistance.Servlet.Processlogin</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>ReturnDocument</servlet-name>
+    <servlet-class>JavaCode.persistance.Servlet.Processreturndocument</servlet-class>
+</servlet>
+
+<servlet>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>JavaCode.persistance.Servlet.Processsignout</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>Adddocument</servlet-name>
+    <url-pattern>/Adddocument</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>BorrowDocument</servlet-name>
+    <url-pattern>/BorrowDocument</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/Login</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>ReturnDocument</servlet-name>
+    <url-pattern>/ReturnDocument</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/Logout</url-pattern>
+</servlet-mapping>
+
+<listener>
+    <listener-class>JavaCode.InitListener</listener-class>
+</listener>
+
+</web-app>
